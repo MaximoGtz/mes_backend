@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Insertion;
+use App\Models\Profiler;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,5 +21,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+        Profiler::factory(3)->create()->each(function ($profiler) {
+            Insertion::factory(10)->create(["machine_number" => $profiler->number]);
+        });
     }
 }
