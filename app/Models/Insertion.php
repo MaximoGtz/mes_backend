@@ -12,7 +12,9 @@ class Insertion extends Model
         "profile_length",
         "distance_between_holes",
         "length_before_reset",
-        "machine_number"
+        "machine_number",
+        "good_piece",
+        "cicle_time"
     ];
     public function profiler()
     {

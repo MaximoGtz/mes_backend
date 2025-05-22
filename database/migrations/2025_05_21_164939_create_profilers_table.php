@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string("model");
             $table->unsignedInteger("number")->unique();
             $table->bigInteger("year_model");
+            $table->integer("machine_speed");
             $table->timestamps();
         });
     }

@@ -13,7 +13,8 @@ class Profiler extends Model
         "number",
         "model",
         "ip",
-        "year_model"
+        "year_model",
+        "machine_speed",
     ];
 
     public function insertions()

@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->integer("profile_length");
             $table->integer("distance_between_holes");
             $table->float("length_before_reset");
+            $table->boolean("good_piece");
+            $table->integer("cicle_time");
             $table->timestamps();
         });
     }

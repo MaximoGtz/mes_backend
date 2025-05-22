@@ -23,7 +23,8 @@ class ProfilerFactory extends Factory
             'ip' => $this->faker->randomFloat(5, 190, 199),
             'model' => "PROFILER" . $this->faker->randomDigit() . $this->faker->randomDigit(),
             'number' => $this->faker->unique()->numberBetween(1, 20),
-            'year_model' => $this->faker->numberBetween(2000, 2025)
+            'year_model' => $this->faker->numberBetween(2000, 2025),
+            'machine_speed' => $this->faker->numberBetween(10, 20)
         ];
     }
 }
