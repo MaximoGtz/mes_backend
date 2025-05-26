@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Profiler extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         "name",
         "status",
@@ -16,7 +17,9 @@ class Profiler extends Model
         "year_model",
         "machine_speed",
     ];
-
+    protected $hidden = [
+        "deleted_at"
+    ];
     public function insertions()
     {
         return $this->hasMany(Insertion::class, "machine_number", "number");

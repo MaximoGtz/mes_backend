@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
         Profiler::factory(3)->create()->each(function ($profiler) {
-            Insertion::factory(10)->create(["machine_number" => $profiler->number]);
+            Insertion::factory(100)->create(["machine_number" => $profiler->number]);
         });
     }
 }

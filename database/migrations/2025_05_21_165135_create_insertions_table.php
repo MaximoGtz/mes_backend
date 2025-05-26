@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->boolean("good_piece");
             $table->integer("cicle_time");
             $table->timestamps();
+            // se agrega el softdeletes para que cuando borremos no se borren todas las inserciones
+            $table->softDeletes();
         });
     }
 

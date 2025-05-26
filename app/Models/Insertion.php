@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+// Esto es para añadir las configuraciones de soft deletes a tu modelo, checa las migraciones para agregar el dato y poder trabajarlo
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Insertion extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         "recipe_number",
         "profile_length",
@@ -15,6 +17,10 @@ class Insertion extends Model
         "machine_number",
         "good_piece",
         "cicle_time"
+    ];
+    protected $hidden = [
+        "updated_at",
+        "deleted_at"
     ];
     public function profiler()
     {

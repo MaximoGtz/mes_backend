@@ -20,7 +20,7 @@ class ProfilerFactory extends Factory
         return [
             'status' => 'disponible',
             'name' => $this->faker->word,
-            'ip' => $this->faker->randomFloat(5, 190, 199),
+            'ip' => '192.323.123.23',
             'model' => "PROFILER" . $this->faker->randomDigit() . $this->faker->randomDigit(),
             'number' => $this->faker->unique()->numberBetween(1, 20),
             'year_model' => $this->faker->numberBetween(2000, 2025),

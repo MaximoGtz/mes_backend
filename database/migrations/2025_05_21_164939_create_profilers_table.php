@@ -14,12 +14,13 @@ return new class extends Migration {
             $table->id();
             $table->string("status");
             $table->string("name");
-            $table->float("ip");
+            $table->string("ip");
             $table->string("model");
             $table->unsignedInteger("number")->unique();
             $table->bigInteger("year_model");
             $table->integer("machine_speed");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
