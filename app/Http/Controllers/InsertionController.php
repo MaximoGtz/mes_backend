@@ -15,10 +15,23 @@ class InsertionController extends Controller
         $per_page = $request->query("per_page", 12);
         $page = $request->query("page", 0);
         $offset = $page * $per_page;
+        $total_insertions = Insertion::all()->count();
+        $last_page = $total_insertions / $per_page;
+        $residue = $total_insertions % $per_page;
+        // dd($residue);
 
+        if ($residue > 0) {
+            // echo "La división tiene residuo: " . $residue;
+            $last_page = floor($total_insertions / $per_page);
+        } else {
+            // echo "La división no tiene residuo";
+            $last_page--;
+        }
         $insertions = Insertion::skip($offset)->take($per_page)->get();
         return response()->json([
             "message" => "Insertions correctly taken",
+            "total_insertions" => $total_insertions,
+            "last_page" => $last_page,
             "data" => $insertions
         ], 200);
     }
