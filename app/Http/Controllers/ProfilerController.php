@@ -88,4 +88,11 @@ class ProfilerController extends Controller
         ], 200);
     }
 
+    public function getInsertions($id)
+    {
+        $profiler = Profiler::find($id);
+        $insertions = Insertion::where("machine_number", "=", $profiler->number)->get();
+        return response()->json($insertions);
+    }
+
 }
