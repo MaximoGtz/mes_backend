@@ -114,16 +114,16 @@ class InsertionController extends Controller
     }
     public function getInsertionsTable(Request $request)
     {
-        $request->validate([
-            'date' => 'required|date',
-            'profiler_id' => 'required|exists:profilers,id',
-        ]);
+        // $request->validate([
+        //     'date' => 'required|date',
+        //     'profiler_id' => 'required|exists:profilers,id',
+        // ]);
 
-        $date = Carbon::parse($request->input('date'))->startOfDay();
+        $date = Carbon::parse($request->query('date'))->startOfDay();
         $endDate = $date->copy()->endOfDay();
 
         // Obtener el número de máquina
-        $profiler = Profiler::findOrFail($request->input('profiler_id'));
+        $profiler = Profiler::findOrFail($request->query('profiler_id'));
         $machineNumber = $profiler->number;
 
         // Agrupar inserciones por hora

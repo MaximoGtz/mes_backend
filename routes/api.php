@@ -7,5 +7,5 @@ Route::get("/profiler/card/{id}", [ProfilerController::class, "getProfiler"]);
 //This method automatically takes all the crud methods, index, create, store, show, update, destroy
 Route::apiResource("/profilers", ProfilerController::class);
 Route::apiResource('/insertions', InsertionController::class);
-Route::get("/profilers/insertions/{id}", [ProfilerController::class, "getInsertions"]);
+// Route::get("/profilers/insertions/{id}", [ProfilerController::class, "getInsertions"]);
 Route::get("/insertions/table/show", [InsertionController::class, "getInsertionsTable"]);
