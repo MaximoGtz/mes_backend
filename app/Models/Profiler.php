@@ -24,4 +24,11 @@ class Profiler extends Model
     {
         return $this->hasMany(Insertion::class, "machine_number", "number");
     }
+    protected static function booted()
+    {
+        static::created(function ($profiler) {
+            $profiler->name = 'China' . $profiler->id;
+            $profiler->save();
+        });
+    }
 }
