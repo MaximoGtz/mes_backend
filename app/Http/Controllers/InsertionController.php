@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Insertion;
 use App\Models\Profiler;
 use Exception;
@@ -8,8 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\InsertionRequest;
+use DateTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+
 class InsertionController extends Controller
 {
     public function index(Request $request)
@@ -121,26 +124,32 @@ class InsertionController extends Controller
 
         $date = Carbon::parse($request->query('date'))->startOfDay();
         $endDate = $date->copy()->endOfDay();
-
         // Obtener el número de máquina
         $profiler = Profiler::findOrFail($request->query('profiler_id'));
         $machineNumber = $profiler->number;
 
         // Agrupar inserciones por hora
         $results = Insertion::select(
+            DB::raw('DATE(created_at) as date'),
             DB::raw('HOUR(created_at) as hour'),
             DB::raw('COUNT(*) as count')
         )
             ->where('machine_number', $machineNumber)
             ->whereBetween('created_at', [$date, $endDate])
-            ->groupBy(DB::raw('HOUR(created_at)'))
+            ->groupBy(DB::raw('DATE(created_at)'), DB::raw('HOUR(created_at)'))
+            ->orderBy('date')
             ->orderBy('hour')
             ->get();
         // Formatear salida
         $formatted = $results->map(function ($item) {
+            $date = new DateTime($item->date);
+            $formattedDate = $date->format('Y-m-d');
+            //Para agregar las justificaciones:
+
             return [
                 'range' => sprintf('%02d:00 - %02d:00', $item->hour, ($item->hour + 1) % 24),
-                'count' => $item->count
+                'count' => $item->count,
+                'date' => $formattedDate
             ];
         });
 
