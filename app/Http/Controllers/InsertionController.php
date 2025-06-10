@@ -12,6 +12,7 @@ use App\Http\Requests\InsertionRequest;
 use DateTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\Justification;
 
 class InsertionController extends Controller
 {
@@ -116,43 +117,42 @@ class InsertionController extends Controller
         }
     }
     public function getInsertionsTable(Request $request)
-    {
-        // $request->validate([
-        //     'date' => 'required|date',
-        //     'profiler_id' => 'required|exists:profilers,id',
-        // ]);
+{
+    $date = Carbon::parse($request->query('date'))->startOfDay();
+    $endDate = $date->copy()->endOfDay();
 
-        $date = Carbon::parse($request->query('date'))->startOfDay();
-        $endDate = $date->copy()->endOfDay();
-        // Obtener el número de máquina
-        $profiler = Profiler::findOrFail($request->query('profiler_id'));
-        $machineNumber = $profiler->number;
+    $profiler = Profiler::findOrFail($request->query('profiler_id'));
+    $machineNumber = $profiler->number;
 
-        // Agrupar inserciones por hora
-        $results = Insertion::select(
-            DB::raw('DATE(created_at) as date'),
-            DB::raw('HOUR(created_at) as hour'),
-            DB::raw('COUNT(*) as count')
-        )
-            ->where('machine_number', $machineNumber)
-            ->whereBetween('created_at', [$date, $endDate])
-            ->groupBy(DB::raw('DATE(created_at)'), DB::raw('HOUR(created_at)'))
-            ->orderBy('date')
-            ->orderBy('hour')
-            ->get();
-        // Formatear salida
-        $formatted = $results->map(function ($item) {
-            $date = new DateTime($item->date);
-            $formattedDate = $date->format('Y-m-d');
-            //Para agregar las justificaciones:
+    // Obtener inserciones agrupadas por fecha y hora
+    $insertionResults = Insertion::select(
+        DB::raw('DATE(created_at) as date'),
+        DB::raw('HOUR(created_at) as hour'),
+        DB::raw('COUNT(*) as count')
+    )
+        ->where('machine_number', $machineNumber)
+        ->whereBetween('created_at', [$date, $endDate])
+        ->groupBy(DB::raw('DATE(created_at)'), DB::raw('HOUR(created_at)'))
+        ->orderBy('date')
+        ->orderBy('hour')
+        ->get();
 
-            return [
-                'range' => sprintf('%02d:00 - %02d:00', $item->hour, ($item->hour + 1) % 24),
-                'count' => $item->count,
-                'date' => $formattedDate
-            ];
-        });
+    $formatted = $insertionResults->map(function ($item) {
+        // Rango horario: desde la hora hasta la siguiente hora
+        $startDateTime = Carbon::parse($item->date)->setHour($item->hour)->startOfHour();
+        $endDateTime = (clone $startDateTime)->endOfHour();
 
-        return response()->json($formatted);
-    }
+        // Obtener todas las justificaciones en ese rango horario
+        $justifications = Justification::whereBetween('date_justified', [$startDateTime, $endDateTime])->get();
+
+        return [
+            'range' => sprintf('%02d:00 - %02d:00', $item->hour, ($item->hour + 1) % 24),
+            'count' => $item->count,
+            'date' => $item->date,
+            'justifications' => $justifications,  // Todas las justificaciones para esa hora
+        ];
+    });
+
+    return response()->json($formatted);
+}
 }
