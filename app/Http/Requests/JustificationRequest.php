@@ -26,7 +26,7 @@ class JustificationRequest extends ApiFormRequest
             'minutes_off' => 'required|max:60',
             'justification' => 'required|string|max:255',
             'date_justified' => 'required|date',
-            'machine_number' => 'required|exists:profilers,number'
+            'profiler_id' => 'required|exists:profilers,id'
         ];
     }
     public function messages():array{

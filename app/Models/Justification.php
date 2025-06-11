@@ -8,7 +8,7 @@ class Justification extends Model
 {
     protected $fillable = [
         "worker",
-        "machine_number",
+        "profiler_id",
         "justification",
         "date_justified",
         "minutes_off"

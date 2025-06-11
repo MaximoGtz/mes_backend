@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('justifications', function (Blueprint $table) {
-            $table->unsignedInteger("machine_number");
-            $table->foreign("machine_number")
-                ->references("number")->on("profilers")
+            $table->unsignedBigInteger("profiler_id");
+            $table->foreign("profiler_id")
+                ->references("id")->on("profilers")
                 ->cascadeOnDelete();
         });
     }
@@ -25,8 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('justifications', function (Blueprint $table) {
-             $table->dropForeign(["machine_number"]);
-            $table->dropColumn('machine_number');
+             $table->dropForeign(["profiler_id"]);
+            $table->dropColumn('profiler_id');
         });
     }
 };
