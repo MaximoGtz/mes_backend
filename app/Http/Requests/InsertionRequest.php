@@ -28,7 +28,7 @@ class InsertionRequest extends ApiFormRequest
     {
         return [
             'recipe_number' => 'required|integer',
-            'profile_length' => 'required|integer',
+            'profile_length' => 'required|numeric',
             'distance_between_holes' => 'required|integer',
             'length_before_reset' => 'required|numeric',
             'good_piece' => 'required|boolean',
