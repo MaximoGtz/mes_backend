@@ -24,7 +24,7 @@ class ProfilerRequest extends ApiFormRequest
         return [
             "name" => "required|string",
             "status" => "required|in:automatic,manual,run,stop",
-            "number" => "required|integer|unique:profilers,id",
+            "number" => "required|integer|unique:profilers,number",
             "model" => "required|string",
             "ip" => "required|string",
             "year_model" => "required|numeric|min:2000|max:" . date("Y"),
